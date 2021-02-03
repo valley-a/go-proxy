@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/hashicorp/consul/api"
+	"github.com/sirupsen/logrus"
 )
 
 // GetService 根据服务名获取注册中心地址
@@ -25,12 +26,13 @@ func GetService(service string) map[string]struct{} {
 	}
 	// 获取地址
 	services, metainfo, err := client.Health().Service(service, "", true, &api.QueryOptions{
-		WaitIndex: lastIndex, // 同步直到有新的更新
+		WaitTime: 1000, // 同步直到有新的更新
 	})
 	if err != nil {
 		log.Println("error retrieving instances from Consul:", err)
 	}
 	lastIndex = metainfo.LastIndex
+	logrus.Info(lastIndex)
 	addrs := map[string]struct{}{}
 	// 返回服务地址
 	for _, service := range services {

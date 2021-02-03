@@ -14,3 +14,6 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 paic.cn/.vscode/launch.json
+.vscode/launch.json
+.gitignore
+paic.cn/vendor

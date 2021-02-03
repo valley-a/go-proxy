@@ -6,7 +6,11 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	logrus "github.com/sirupsen/logrus"
 )
+
+var loga = logrus.New()
 
 // RouteHandler 根据请求URL转发到服务
 func RouteHandler(w http.ResponseWriter, r *http.Request) {
@@ -22,6 +26,11 @@ func RouteHandler(w http.ResponseWriter, r *http.Request) {
 	// 获取随机地址
 	url := randMapValue(servs)
 
+	if url == "" {
+		logrus.Error("url is empty!")
+		return
+	}
+
 	// 请求转发
 	resp, err := http.Get("http://" + url + path)
 	if err != nil {
@@ -33,6 +42,11 @@ func RouteHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err.Error())
 	}
+
+	loga.WithFields(logrus.Fields{
+		"url":  url,
+		"path": path,
+	}).Info(string(body))
 
 	log.Println(string(body))
 	fmt.Fprintln(w, string(body))
