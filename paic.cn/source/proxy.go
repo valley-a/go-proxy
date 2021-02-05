@@ -108,6 +108,7 @@ func saveFile(w http.ResponseWriter, r *http.Request) string {
 	fmt.Printf("File Size: %+v\n", handler.Size)
 	fmt.Printf("MIME Header: %+v\n", handler.Header)
 
+	// save temp files
 	tempFile, err := ioutil.TempFile("temp-images", "upload-*"+handler.Filename)
 	if err != nil {
 		fmt.Println(err)
